@@ -1,20 +1,53 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { View, Text } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import ScreenOne from "./components/ScreenOne";
+import ScreenTwo from "./components/ScreenTwo";
+import { useState, useEffect } from "react";
+import ScreenThree from "./components/ScreenThree";
 
-export default function App() {
+const Stack = createNativeStackNavigator();
+
+function App() {
+  const [showScreenOne, setShowScreenOne] = useState(true);
+  const [showScreenTwo, setShowScreenTwo] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setShowScreenOne(false);
+    }, 3000);
+  }, []);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowScreenTwo(false);
+    }, 20000);
+  }, []);
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        {showScreenOne ? (
+          <Stack.Screen
+            name="ScreenOne"
+            component={ScreenOne}
+            options={{ headerShown: false }}
+          />
+        ) : null}
+        {showScreenTwo ? (
+          <Stack.Screen
+            name="ScreenTwo"
+            component={ScreenTwo}
+            options={{ headerShown: false }}
+          />
+        ) : null}
+        <Stack.Screen name="ScreenThree" component={ScreenThree} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
